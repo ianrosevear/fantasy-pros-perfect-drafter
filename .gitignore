@@ -1,5 +1,6 @@
 chromedriver.exe
 passwords.py
+venv/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
