@@ -24,7 +24,7 @@ ROSTER_NUM = 1
 MAX_ATTEMPTS = 10000
 
 # modify this path to point to where you put the chromedriver file
-# if chromedriver is in the same folder as this file, use './chromedriver'
+# if chromedriver is in the same folder as this file, use './chromedriver' ('./chromedriver.exe' on windows)
 CHROMEDRIVER_PATH = './chromedriver.exe'
 
 # maximum time the driver will wait for something to load, increase if poor connection

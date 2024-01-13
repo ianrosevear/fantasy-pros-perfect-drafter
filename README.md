@@ -1,3 +1,6 @@
+# Requirements
+- Google Chrome
+- Python 3
 # Setup
 - Clone this project
   - `git clone https://github.com/ianrosevear/cdc-query-tool cdc-query-tool`
@@ -24,8 +27,9 @@
 - Activate virtual environment (remember to deactivate when you are done)
   - `source venv/bin/activate`
   - `venv\Scripts\activate` (Windows)
+- Add rosters to `rosters.py` as shown in the examples
 - Modify values in the "MODIFY VALUES HERE" section at the top of `main.py` as needed
 - Run the tool
-  - `python main.py`
+  - `python3 main.py`
 - Deactivate virtual environment
   - `deactivate`
