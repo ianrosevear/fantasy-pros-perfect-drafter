@@ -7,50 +7,62 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 import passwords
 import rosters
-from settings import DRAFT_POSITION, ROSTER_NUM, MAX_ATTEMPTS, CHROMEDRIVER_PATH, SITE_URL
+from settings import *
 
 from datetime import datetime, timedelta
 import time
 import os
 
 
+
+def create_driver():
+    options = webdriver.ChromeOptions()
+
+    options.add_argument("start-maximized") # https://stackoverflow.com/a/26283818/1689770
+    options.add_argument("enable-automation") # https://stackoverflow.com/a/43840128/1689770
+    # options.add_argument("--headless") # only if you are ACTUALLY running headless
+    options.add_argument("--no-sandbox") # https://stackoverflow.com/a/50725918/1689770
+    options.add_argument("--disable-dev-shm-usage") #https://stackoverflow.com/a/50725918/1689770
+    options.add_argument("--disable-browser-side-navigation") # https://stackoverflow.com/a/49123152/1689770
+    options.add_argument("--disable-gpu") # https://stackoverflow.com/questions/51959986/how-to-solve-selenium-chromedriver-timed-out-receiving-message-from-renderer-exc
+
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.add_argument("--mute-audio")
+    service = Service(executable_path=CHROMEDRIVER_PATH)
+    driver = webdriver.Chrome(service=service, options=options)
+    #driver.implicitly_wait(MAX_LOAD)
+
+    return driver
+
+def login(driver):
+    # go to site
+    site = f'{SITE_URL}{DRAFT_POSITION-1}'
+    driver.get(site)
+    #driver.maximize_window()
+
+    # log in
+    time.sleep(1)
+    username_field = driver.find_element(By.ID, 'username')
+    password_field = driver.find_element(By.ID, 'password')
+    time.sleep(1)
+
+    username_field.send_keys(passwords.username)
+    time.sleep(1.1)
+    password_field.send_keys(passwords.password)
+
+    # submit_button = driver.find_element(By.XPATH, "//button[@type='submit']")
+    # submit_button.click()
+
+    input('Please login, then press any key to continue...')
+
+    driver.get(site)
+    time.sleep(1)
+
 # ---- CREATING DRIVER ----
-options = webdriver.ChromeOptions()
-
-options.add_argument("start-maximized") # https://stackoverflow.com/a/26283818/1689770
-options.add_argument("enable-automation") # https://stackoverflow.com/a/43840128/1689770
-# options.add_argument("--headless") # only if you are ACTUALLY running headless
-options.add_argument("--no-sandbox") # https://stackoverflow.com/a/50725918/1689770
-options.add_argument("--disable-dev-shm-usage") #https://stackoverflow.com/a/50725918/1689770
-options.add_argument("--disable-browser-side-navigation") # https://stackoverflow.com/a/49123152/1689770
-options.add_argument("--disable-gpu") # https://stackoverflow.com/questions/51959986/how-to-solve-selenium-chromedriver-timed-out-receiving-message-from-renderer-exc
-
-options.add_experimental_option('excludeSwitches', ['enable-logging'])
-options.add_argument("--mute-audio")
-service = Service(executable_path=CHROMEDRIVER_PATH)
-driver = webdriver.Chrome(service=service, options=options)
-#driver.implicitly_wait(MAX_LOAD)
-
+driver = create_driver()
 
 # ---- NAVIGATING TO SITE ----
-# go to site
-site = f'{SITE_URL}{DRAFT_POSITION-1}'
-driver.get(site)
-#driver.maximize_window()
-
-# log in
-username_field = driver.find_element(By.ID, 'username')
-password_field = driver.find_element(By.ID, 'password')
-
-username_field.send_keys(passwords.username)
-password_field.send_keys(passwords.password)
-
-submit_button = driver.find_element(By.XPATH, "//button[@type='submit']")
-submit_button.click()
-
-time.sleep(1)
-driver.get(site)
-time.sleep(2)
+login(driver)
 
 # ---- ATTEMPTING TO DRAFT ----
 
@@ -62,10 +74,16 @@ times_drafted = dict(zip(player_list, [0] * len(player_list)))
 # -- RUN DRAFTS --
 for i in range(MAX_ATTEMPTS):
 
+    # -- RESTART DRIVER AT THRESHOLD --
+    if i != 0 and (MAX_ATTEMPTS - 1 - i) % RESTART_THRESHOLD == 0:
+        driver.close()
+        time.sleep(0.5)
+        driver = create_driver()
+        login(driver)
+
     # refresh between attempts
     try_count = 0
     max_try_count = 5
-    
     while(try_count <= max_try_count):
         try:
             try_count += 1
@@ -89,7 +107,6 @@ for i in range(MAX_ATTEMPTS):
             # get search field
             try_count = 0
             max_try_count = 20
-            
             while(try_count <= max_try_count):
                 try:
                     try_count += 1
@@ -106,7 +123,6 @@ for i in range(MAX_ATTEMPTS):
             # get draft button
             try_count = 0
             max_try_count = 20
-            
             while(try_count <= max_try_count):
                 try:
                     try_count += 1
