@@ -7,31 +7,11 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 import passwords
 import rosters
+from settings import DRAFT_POSITION, ROSTER_NUM, MAX_ATTEMPTS, CHROMEDRIVER_PATH, SITE_URL
 
 from datetime import datetime, timedelta
 import time
 import os
-
-# -------- MODIFY VALUES HERE --------
-
-# position to draft from, from 1 to 12
-DRAFT_POSITION = 5
-
-# which roster to use, first roster is 0, second is 1, etc.
-ROSTER_NUM = 1
-
-# maximum attempts per roster (my version of chromedriver seems to run out of memory around 1600 attempts)
-MAX_ATTEMPTS = 10000
-
-# modify this path to point to where you put the chromedriver file
-# if chromedriver is in the same folder as this file, use './chromedriver' ('./chromedriver.exe' on windows)
-CHROMEDRIVER_PATH = './chromedriver.exe'
-
-# site url
-SITE_URL = 'https://draftwizard.fantasypros.com/football/mock-draft-simulator/perfect-draft/?userPos='
-
-
-# -------- DO NOT TOUCH BELOW CODE --------
 
 
 # ---- CREATING DRIVER ----
@@ -75,7 +55,7 @@ time.sleep(2)
 # ---- ATTEMPTING TO DRAFT ----
 
 # -- SET UP STATS --
-player_list = passwords.draft_order[ROSTER_NUM].split('\n')
+player_list = rosters.draft_order[ROSTER_NUM].split('\n')
 
 times_drafted = dict(zip(player_list, [0] * len(player_list)))
 
@@ -90,6 +70,7 @@ for i in range(MAX_ATTEMPTS):
         try:
             try_count += 1
             driver.refresh()
+            break
         except Exception as e:
             print('\nERROR: Could not refresh. Retrying...')
             time.sleep(0.1)
@@ -113,6 +94,7 @@ for i in range(MAX_ATTEMPTS):
                 try:
                     try_count += 1
                     search_field = driver.find_element(By.XPATH, '//input[@ng-model="playerSearchString"]')
+                    break
                 except Exception as e:
                     time.sleep(0.1)
             
@@ -129,6 +111,7 @@ for i in range(MAX_ATTEMPTS):
                 try:
                     try_count += 1
                     draft_button = driver.find_element(By.XPATH, '//input[@class="rdr-search-results__draft-btn"]')
+                    break
                 except Exception as e:
                     time.sleep(0.1)
 
