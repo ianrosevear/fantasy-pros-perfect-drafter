@@ -3,8 +3,8 @@
 - Python 3
 # Setup
 - Clone this project
-  - `git clone https://github.com/ianrosevear/cdc-query-tool cdc-query-tool`
-  - `cd cdc-query-tool`
+  - `git clone https://github.com/ianrosevear/fantasy-pros-perfect-drafter/ fantasy-pros-perfect-drafter`
+  - `cd fantasy-pros-perfect-drafter`
 - Create virtual environment
   - `python3 -m venv venv`
 - Activate virtual environment (remember to deactivate when you are done)
@@ -23,10 +23,11 @@
 
 # Usage
 - Navigate terminal to workspace folder
-  - `cd cdc-query-tool`
+  - `cd fantasy-pros-perfect-drafter`
 - Activate virtual environment (remember to deactivate when you are done)
   - `source venv/bin/activate`
   - `venv\Scripts\activate` (Windows)
+- Rename `passwords_example.py` to `passwords.py` and add your FantasyPros login information
 - Add rosters to `rosters.py` as shown in the examples
 - Modify values in the "MODIFY VALUES HERE" section at the top of `main.py` as needed
 - Run the tool
