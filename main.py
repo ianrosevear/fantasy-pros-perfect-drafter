@@ -20,18 +20,16 @@ DRAFT_POSITION = 5
 # which roster to use, first roster is 0, second is 1, etc.
 ROSTER_NUM = 1
 
-# maximum attempts per roster
+# maximum attempts per roster (my version of chromedriver seems to run out of memory around 1600 attempts)
 MAX_ATTEMPTS = 10000
 
 # modify this path to point to where you put the chromedriver file
 # if chromedriver is in the same folder as this file, use './chromedriver' ('./chromedriver.exe' on windows)
 CHROMEDRIVER_PATH = './chromedriver.exe'
 
-# maximum time the driver will wait for something to load, increase if poor connection
-MAX_LOAD = 15
-
 # site url
 SITE_URL = 'https://draftwizard.fantasypros.com/football/mock-draft-simulator/perfect-draft/?userPos='
+
 
 # -------- DO NOT TOUCH BELOW CODE --------
 
@@ -139,7 +137,7 @@ for i in range(MAX_ATTEMPTS):
                 print(f'{player} has already been drafted, moving to next attempt')
                 break
 
-            # wait until our turn to draft
+            # wait until my turn to draft
             my_turn = False
             while not my_turn:
                 if driver.find_element(By.XPATH, '//div[@class="rdr-on-the-clock"]').text != '1:00':
