@@ -10,8 +10,9 @@
 - Install Selenium (this will only install Selenium into your virtual environment, so it won't affect anything else)
   - `pip3 install selenium`
 - Download chrome webdriver
-  - https://chromedriver.chromium.org/downloads
-  - Place the downloaded `chromedriver` file into your workspace folder
+  - Older Chrome versions: https://chromedriver.chromium.org/downloads
+  - Newer Chrome versions: https://googlechromelabs.github.io/chrome-for-testing/
+  - Place the downloaded `chromedriver` file into your workspace folder (it will be called `chromedriver.exe` on Windows)
 - Remove chromedriver from Mac quarantine (this should not require admin access)
   - `xattr -d com.apple.quarantine chromedriver`
 - Deactivate virtual environment
@@ -22,6 +23,7 @@
   - `cd cdc-query-tool`
 - Activate virtual environment (remember to deactivate when you are done)
   - `source venv/bin/activate`
+  - `venv\Scripts\activate` (Windows)
 - Modify values in the "MODIFY VALUES HERE" section at the top of `main.py` as needed
 - Run the tool
   - `python main.py`
